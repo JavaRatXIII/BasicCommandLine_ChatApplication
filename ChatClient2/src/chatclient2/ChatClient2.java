@@ -8,7 +8,8 @@ package chatclient2;
 import Console.*;
 import Console.IConsole.*;
 import java.io.IOException;
-import javax.swing.JOptionPane;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,15 +23,35 @@ public class ChatClient2 {
     public static void main(String[] args) throws IOException
     {
         IConsole console = new Console();
-        System.out.println("CLIENT READY");
+        console.WriteLine("CLIENT READY");
+        
         Client client = new Client();
+        console.WriteLine("Message: ");
         String input = console.ReadLine();
+        
+        Thread thread = new Thread(() ->
+        {
+            try
+            {
+                while(true)
+                {
+                    client.Receive();
+                }
+            }
+            catch (IOException ex)
+            {
+                
+            }
+        });
+        
+        thread.start();
+        
         while(!(input.equals("exit")||input.equals("Exit")))
         {
             client.Send(input);
             input = console.ReadLine();
         }
-         
+        
+        thread.stop();
     }
-    
 }

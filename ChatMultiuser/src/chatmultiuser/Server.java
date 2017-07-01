@@ -15,6 +15,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -26,47 +28,61 @@ public class Server {
     static DataInputStream _inputStream;
     static DataOutputStream _outputStream;
     static String _msg;
-    static IConsole console = new Console();
+    private final IConsole _console = new Console();
+    
+    private List<Socket> _clientConnections = new ArrayList();
     
     public Server() throws IOException
     {
-        String input2 = "";
         ServerSocket listener = new ServerSocket(1204);
-        try {
-            while(true) {
-                Socket socket = listener.accept();
-                try {
-                    input2 = console.ReadLine();
-                    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                    out.println("SERVER>> " + input2);
-                    
-                    BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    String clientMessage = input.readLine();
-                    System.out.println(clientMessage);
-                } finally {
-                    socket.close();
-                }
+        try 
+        {
+            while(true)
+            {
+                final Socket socket = listener.accept();
+                send(socket, "Hello client");
+                _clientConnections.add(socket);
+                
+                new Thread(() ->
+                {
+                    try
+                    {
+                        while(true)
+                        {
+                            getMSG(socket);
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        _console.WriteLine(e.getMessage());
+                    }
+                }).start();
             }
         }
-        finally {
+        finally
+        {
             listener.close();
         }
-
     }
     
-    public  String getMSG()
+    public void getMSG(Socket socket) throws IOException
     {
-        String msg = _msg;
-        return msg;
+        BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        String clientMessage = input.readLine();
+        _console.WriteLine(clientMessage);
+        
+        for(Socket clientConnection : _clientConnections)
+        {
+            send(clientConnection, clientMessage);
+        }
     }
     
-    public static void send()
+    private static void send(Socket socket, String message)
     {
         try
         {
-            String messageOut = "";
-            messageOut = console.ReadLine();
-            _outputStream.writeUTF(messageOut);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            out.println("SERVER>> " + message);
         }
         catch(Exception e)
         {

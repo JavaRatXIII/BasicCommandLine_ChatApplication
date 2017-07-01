@@ -6,8 +6,6 @@
 package chatclient2;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -19,23 +17,28 @@ import java.net.Socket;
  */
 public class Client {
     private PrintWriter _outputWriter;
+    private Socket _socket;
     
     public Client() throws IOException
     {
-        Socket socket = new Socket("192.168.1.110", 1204);
+        _socket = new Socket("192.168.1.228", 1204);
         
         try
         {   
-            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String serverMessage = input.readLine();
-            System.out.println(serverMessage);
-            
-            _outputWriter = new PrintWriter(socket.getOutputStream(), true);
+            Receive();
+            _outputWriter = new PrintWriter(_socket.getOutputStream(), true);
         }
         catch(Exception e)
         {
             System.out.println(e);
         }
+    }
+    
+    public void Receive() throws IOException
+    {
+        BufferedReader input = new BufferedReader(new InputStreamReader(_socket.getInputStream()));
+        String serverMessage = input.readLine();
+        System.out.println(serverMessage);
     }
     
     public void Send(String message)
