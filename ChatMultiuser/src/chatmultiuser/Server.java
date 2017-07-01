@@ -73,7 +73,10 @@ public class Server {
         
         for(Socket clientConnection : _clientConnections)
         {
-            send(clientConnection, clientMessage);
+            if(socket != clientConnection)
+            {
+                send(clientConnection, clientMessage);
+            }
         }
     }
     
