@@ -28,9 +28,10 @@ public class Server {
     static DataInputStream _inputStream;
     static DataOutputStream _outputStream;
     static String _msg;
+    private ClientSocket clientSocket;
     private final IConsole _console = new Console();
     
-    private List<Socket> _clientConnections = new ArrayList();
+    private List<ClientSocket> _clientConnections = new ArrayList();
     
     public Server() throws IOException
     {
@@ -41,7 +42,9 @@ public class Server {
             {
                 final Socket socket = listener.accept();
                 send(socket, "Hello client");
-                _clientConnections.add(socket);
+                
+                clientSocket = new ClientSocket(socket);
+                _clientConnections.add(clientSocket);
                 
                 new Thread(() ->
                 {
@@ -71,11 +74,11 @@ public class Server {
         String clientMessage = input.readLine();
         _console.WriteLine(clientMessage);
         
-        for(Socket clientConnection : _clientConnections)
+        for(ClientSocket clientConnection : _clientConnections)
         {
-            if(socket != clientConnection)
+            if(socket != clientConnection.GetSocket())
             {
-                send(clientConnection, clientMessage);
+                send(clientConnection.GetSocket(), clientMessage);
             }
         }
     }

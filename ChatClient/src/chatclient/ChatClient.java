@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package chatclient2;
+package chatclient;
 
 import Console.*;
 import Console.IConsole.*;
@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author Jun
  */
-public class ChatClient2 {
+public class ChatClient {
 
     /**
      * @param args the command line arguments

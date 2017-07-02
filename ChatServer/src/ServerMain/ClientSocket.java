@@ -5,10 +5,22 @@
  */
 package ServerMain;
 
+import java.net.Socket;
+
 /**
  *
  * @author Jun
  */
 public class ClientSocket {
+    private Socket _communicationSocket;
     
+    public Socket GetSocket()
+    {
+        return _communicationSocket;
+    }
+    
+    public ClientSocket(Socket socket)
+    {
+        _communicationSocket = socket;
+    }
 }
