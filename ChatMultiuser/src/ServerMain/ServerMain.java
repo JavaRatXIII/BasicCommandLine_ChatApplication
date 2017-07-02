@@ -1,4 +1,4 @@
-package chatmultiuser;
+package ServerMain;
 
 import java.io.IOException;
 import Console.*;
@@ -8,7 +8,7 @@ import Console.IConsole.*;
  *
  * @author Jun
  */
-public class ChatMultiuser {
+public class ServerMain {
     
     public static void main(String[] args) throws IOException {
         IConsole console = new Console();
