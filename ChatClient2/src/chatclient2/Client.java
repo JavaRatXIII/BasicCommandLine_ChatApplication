@@ -21,7 +21,7 @@ public class Client {
     
     public Client() throws IOException
     {
-        _socket = new Socket("192.168.1.228", 1204);
+        _socket = new Socket("192.168.1.110", 1204);
         
         try
         {   
