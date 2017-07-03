@@ -28,10 +28,10 @@ public class Server {
     static DataInputStream _inputStream;
     static DataOutputStream _outputStream;
     static String _msg;
-    private ClientSocket clientSocket;
+    private ClientSocketInterface clientSocket;
     private final IConsole _console = new Console();
     
-    private List<ClientSocket> _clientConnections = new ArrayList();
+    private List<ClientSocketInterface> _clientConnections = new ArrayList();
     
     public Server() throws IOException
     {
@@ -74,7 +74,7 @@ public class Server {
         String clientMessage = input.readLine();
         _console.WriteLine(clientMessage);
         
-        for(ClientSocket clientConnection : _clientConnections)
+        for(ClientSocketInterface clientConnection : _clientConnections)
         {
             if(socket != clientConnection.GetSocket())
             {
