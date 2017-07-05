@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package chatclient;
+package chatclient2;
 
+import Interfaces.IBufferedReaderFactory;
+import Interfaces.IPrintWriterFactory;
+import Interfaces.ISocketFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,15 +21,17 @@ import java.net.Socket;
 public class Client {
     private PrintWriter _outputWriter;
     private Socket _socket;
+    private BufferedReader _input;
     
-    public Client() throws IOException
+    public Client(ISocketFactory socketFactory, IPrintWriterFactory printWriterFactory, IBufferedReaderFactory bufferedReaderFactory) throws IOException
     {
-        _socket = new Socket("192.168.1.110", 1204);
+        _socket = socketFactory.GetSocket();
+        _input = bufferedReaderFactory.GetBufferedReader(_socket);
         
         try
         {   
             Receive();
-            _outputWriter = new PrintWriter(_socket.getOutputStream(), true);
+            _outputWriter = printWriterFactory.GetPrintWriter(_socket);
         }
         catch(Exception e)
         {
@@ -36,8 +41,7 @@ public class Client {
     
     public void Receive() throws IOException
     {
-        BufferedReader input = new BufferedReader(new InputStreamReader(_socket.getInputStream()));
-        String serverMessage = input.readLine();
+        String serverMessage = _input.readLine();
         System.out.println(serverMessage);
     }
     

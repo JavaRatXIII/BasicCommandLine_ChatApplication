@@ -8,6 +8,10 @@ package ServerMain;
 import java.io.BufferedReader;
 import Console.*;
 import Console.IConsole.*;
+import Interfaces.IClientSocketFactory;
+import Interfaces.IConsoleFactory;
+import Utilities.ClientSocketFactory;
+import Utilities.ConsoleFactory;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,14 +32,16 @@ public class Server {
     static DataInputStream _inputStream;
     static DataOutputStream _outputStream;
     static String _msg;
-    private ClientSocketInterface clientSocket;
-    private final IConsole _console = new Console();
+    private IClientSocket clientSocket;
+    private final IConsole _console;
     
-    private List<ClientSocketInterface> _clientConnections = new ArrayList();
+    private List<IClientSocket> _clientConnections = new ArrayList();
     
-    public Server() throws IOException
+    public Server(IConsoleFactory consoleFactory, IClientSocketFactory clientFactory) throws IOException
     {
         ServerSocket listener = new ServerSocket(1204);
+        _console = consoleFactory.GetConsole();
+        
         try 
         {
             while(true)
@@ -43,8 +49,8 @@ public class Server {
                 final Socket socket = listener.accept();
                 send(socket, "Hello client");
                 
-                clientSocket = new ClientSocket(socket);
-                _clientConnections.add(clientSocket);
+                clientSocket = clientFactory.GetClientSocket(socket);
+                _clientConnections.add(clientSocket); 
                 
                 new Thread(() ->
                 {
@@ -74,7 +80,7 @@ public class Server {
         String clientMessage = input.readLine();
         _console.WriteLine(clientMessage);
         
-        for(ClientSocketInterface clientConnection : _clientConnections)
+        for(IClientSocket clientConnection : _clientConnections)
         {
             if(socket != clientConnection.GetSocket())
             {

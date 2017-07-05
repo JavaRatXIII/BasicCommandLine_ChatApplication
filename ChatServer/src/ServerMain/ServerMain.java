@@ -3,6 +3,8 @@ package ServerMain;
 import java.io.IOException;
 import Console.*;
 import Console.IConsole.*;
+import Utilities.ClientSocketFactory;
+import Utilities.ConsoleFactory;
 
 /**
  *
@@ -24,6 +26,6 @@ public class ServerMain {
         console.WriteLine("You entered: " + input);*/
         
         console.WriteLine("SERVER READY");
-        Server server = new Server();
+        Server server = new Server(new ConsoleFactory(), new ClientSocketFactory());
     }
 }

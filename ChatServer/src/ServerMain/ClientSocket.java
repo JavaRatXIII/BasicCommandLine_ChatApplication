@@ -11,7 +11,8 @@ import java.net.Socket;
  *
  * @author Jun
  */
-public class ClientSocket implements ClientSocketInterface{
+public class ClientSocket implements IClientSocket
+{
     private Socket _communicationSocket;
     
     @Override

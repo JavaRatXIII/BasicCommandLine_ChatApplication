@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ServerMain;
+package Interfaces;
 
-import java.net.Socket;
+import Console.Console;
 
 /**
  *
  * @author Jun
  */
-public interface ClientSocketInterface {
-    public Socket GetSocket();
+public interface IConsoleFactory 
+{
+    Console GetConsole();
 }

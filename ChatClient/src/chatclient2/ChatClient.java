@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package chatclient;
+package chatclient2;
 
 import Console.*;
 import Console.IConsole.*;
+import Utilities.BufferedReaderFactory;
+import Utilities.PrintWriterFactory;
+import Utilities.SocketFactory;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -25,7 +26,7 @@ public class ChatClient {
         IConsole console = new Console();
         console.WriteLine("CLIENT READY");
         
-        Client client = new Client();
+        Client client = new Client(new SocketFactory(), new PrintWriterFactory(), new BufferedReaderFactory());
         console.WriteLine("Message: ");
         String input = console.ReadLine();
         
