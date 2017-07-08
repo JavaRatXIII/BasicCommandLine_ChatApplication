@@ -45,8 +45,8 @@ public class Client {
         System.out.println(serverMessage);
     }
     
-    public void Send(String message)
+    public void Send(String name,String message)
     {
-        _outputWriter.println("Client>> " + message);
+        _outputWriter.println(name + ">> " + message);
     }
 }
