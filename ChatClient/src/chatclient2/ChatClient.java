@@ -28,17 +28,30 @@ public class ChatClient {
         console.WriteLine("CLIENT READY");
         
         Client client = new Client(new SocketFactory(), new PrintWriterFactory(), new BufferedReaderFactory());
+        UserNameStorageManager storageManager = new UserNameStorageManager();
         
-        ArrayList<String> userNames = new ArrayList<String>();
-        console.WriteLine("Enter your username");
-        String name = console.ReadLine();
-        boolean nameTaken = CheckName(userNames,name);
+        console.WriteLine("Would you like to set a new username or choose a previous username? [Choose] [Set]");
+        String userChoice = console.ReadLine().toUpperCase();
+        String name = " ";
+        String password = " ";
+        if(userChoice.equals("SET"))
+        {
+            console.WriteLine("Set your username");
+            name = console.ReadLine();
+            console.WriteLine("Set your password");
+            password = console.ReadLine();
+        
+            storageManager.SaveName(name, password);
+        }
+        
+        
+        
+        /*boolean nameTaken = CheckName(name);
         while(nameTaken==false)
         {
             name = console.ReadLine();
             nameTaken = CheckName(userNames,name);
-        }
-        userNames.add(name);
+        }*/
         
         console.WriteLine("Message: ");
         String input = console.ReadLine();
@@ -68,17 +81,5 @@ public class ChatClient {
         }
         
         thread.stop();
-    }
-    
-    public static boolean CheckName(ArrayList<String> userNames, String name)
-    {
-        for(int i = 0; i < userNames.size(); i++)
-        {
-            if(userNames.get(i).equals(name))
-            {
-                return false;
-            }
-        }
-        return true;
     }
 }
