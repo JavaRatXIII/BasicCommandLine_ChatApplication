@@ -26,36 +26,45 @@ public class ChatClient {
     {
         IConsole console = new Console();
         console.WriteLine("CLIENT READY");
+        UserNameStorageManager storageManager = new UserNameStorageManager();
+        String name = " ";
+        String password = " ";
         
         Client client = new Client(new SocketFactory(), new PrintWriterFactory(), new BufferedReaderFactory());
-        UserNameStorageManager storageManager = new UserNameStorageManager();
         
         console.WriteLine("Would you like to set a new username or choose a previous username? [Choose] [Set]");
         String userChoice = console.ReadLine().toUpperCase();
-        String name = " ";
-        String password = " ";
+        
         if(userChoice.equals("SET"))
         {
             console.WriteLine("Set your username");
             name = console.ReadLine();
+            
+            boolean nameTaken = storageManager.CheckName(name);
+            while(nameTaken==false)
+            {
+                console.WriteLine("That name is taken, try again");
+                name = console.ReadLine();
+                nameTaken = storageManager.CheckName(name);
+            }
+            
             console.WriteLine("Set your password");
             password = console.ReadLine();
         
             storageManager.SaveName(name, password);
         }
-        
-        
-        
-        /*boolean nameTaken = CheckName(name);
-        while(nameTaken==false)
+        else if(userChoice.equals("CHOOSE"))
         {
-            name = console.ReadLine();
-            nameTaken = CheckName(userNames,name);
-        }*/
+            
+        }
+        else
+        {
+            name = "Annonymous Client";
+            console.WriteLine("You are an annonymous client");
+        }
         
         console.WriteLine("Message: ");
         String input = console.ReadLine();
-        
         
         Thread thread = new Thread(() ->
         {

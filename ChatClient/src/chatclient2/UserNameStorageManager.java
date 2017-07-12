@@ -7,14 +7,16 @@ import java.util.ArrayList;
  */
 public class UserNameStorageManager 
 {
-    public UserNameStorageManager()
-    {
-        
-    }
     private ResultSet _resultSet = null;
     private Connection _connection = null;
     private Statement _statement = null;
-    private ArrayList<String> userNames = new ArrayList<String>();
+    private ArrayList<String> _userNames = new ArrayList<String>();
+    private ArrayList<String> _userPasswords = new ArrayList<String>();
+    
+    public UserNameStorageManager()
+    {
+        initialiseLists();
+    }
     
     private ResultSet getSqlQueryResult(String sqlStatement) throws SQLException, ClassNotFoundException
     {
@@ -49,16 +51,49 @@ public class UserNameStorageManager
         _connection.close();
     }
     
+    private void initialiseLists()
+    {
+        String sql = "SELECT Username, Password FROM Usernames";
+        try
+        {
+            ResultSet rs = getSqlQueryResult(sql);
+            while(rs.next())
+            {
+                _userNames.add(rs.getString("Username"));
+                _userPasswords.add(rs.getString("Password"));
+            }
+            closeDatabase();
+        }
+        catch(SQLException | ClassNotFoundException e)
+        {
+            System.out.println(e);
+        }
+    }
+    
     public void SaveName(String name, String password)
     {
         String sql = "INSERT INTO Usernames(Username,Password) VALUES('"+name+"','"+password+"')";
         try
         {
+            _userNames.add(name);
+            _userPasswords.add(password);
             executeSqlUpdate(sql);
         }
-        catch(Exception e)
+        catch(SQLException | ClassNotFoundException e)
         {
             System.out.println(e);
         }
+    }
+    
+    public boolean CheckName(String name)
+    {
+        for(int i = 0; i < _userNames.size(); i++)
+        {
+            if(_userNames.get(i).equals(name))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
