@@ -55,7 +55,28 @@ public class ChatClient {
         }
         else if(userChoice.equals("CHOOSE"))
         {
+            console.WriteLine("State Username");
+            name = console.ReadLine();
             
+            boolean foundName = storageManager.SelectUsername(name);
+            
+            while(foundName==false)
+            {
+                console.WriteLine("Cannot find name, try again");
+                name = console.ReadLine();
+                foundName = storageManager.SelectUsername(name);
+            }
+            
+            
+            console.WriteLine("State Password");
+            password = console.ReadLine();
+            boolean loginSuccessful = storageManager.Login(password);
+            while(loginSuccessful==false)
+            {
+                console.WriteLine("Password is incorrect, try again");
+                password = console.ReadLine();
+                loginSuccessful = storageManager.Login(password);
+            }
         }
         else
         {

@@ -12,6 +12,7 @@ public class UserNameStorageManager
     private Statement _statement = null;
     private ArrayList<String> _userNames = new ArrayList<String>();
     private ArrayList<String> _userPasswords = new ArrayList<String>();
+    private int _position = 0;
     
     public UserNameStorageManager()
     {
@@ -95,5 +96,23 @@ public class UserNameStorageManager
             }
         }
         return true;
+    }
+    
+    public boolean SelectUsername(String name)
+    {
+        for(int i = 0; i < _userNames.size(); i++)
+        {
+            if(_userNames.get(i).equals(name))
+            {
+                _position = i;
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean Login(String password)
+    {
+        return _userPasswords.get(_position).equals(password);
     }
 }
