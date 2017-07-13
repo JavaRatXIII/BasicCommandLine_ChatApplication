@@ -26,7 +26,7 @@ public class ChatClient {
     {
         IConsole console = new Console();
         console.WriteLine("CLIENT READY");
-        UserNameStorageManager storageManager = new UserNameStorageManager();
+        IUserNameStorageManager storageManager = new UserNameStorageManager();
         String name = " ";
         String password = " ";
         
@@ -57,16 +57,13 @@ public class ChatClient {
         {
             console.WriteLine("State Username");
             name = console.ReadLine();
-            
             boolean foundName = storageManager.SelectUsername(name);
-            
             while(foundName==false)
             {
                 console.WriteLine("Cannot find name, try again");
                 name = console.ReadLine();
                 foundName = storageManager.SelectUsername(name);
             }
-            
             
             console.WriteLine("State Password");
             password = console.ReadLine();

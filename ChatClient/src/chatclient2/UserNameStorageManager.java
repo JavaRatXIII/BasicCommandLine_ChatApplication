@@ -5,7 +5,7 @@ import java.util.ArrayList;
  *
  * @author Jun
  */
-public class UserNameStorageManager 
+public class UserNameStorageManager implements IUserNameStorageManager
 {
     private ResultSet _resultSet = null;
     private Connection _connection = null;
@@ -19,40 +19,65 @@ public class UserNameStorageManager
         initialiseLists();
     }
     
-    private ResultSet getSqlQueryResult(String sqlStatement) throws SQLException, ClassNotFoundException
+    @Override
+    public ResultSet getSqlQueryResult(String sqlStatement)
     {
-        Class.forName("org.sqlite.JDBC");
-        _connection = DriverManager.getConnection("jdbc:sqlite:rsc\\UserNames.db");
-        _connection.setAutoCommit(false);
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+            _connection = DriverManager.getConnection("jdbc:sqlite:rsc\\UserNames.db");
+            _connection.setAutoCommit(false);
 
-        _statement = _connection.createStatement();
-        _resultSet = _statement.executeQuery(sqlStatement);
+            _statement = _connection.createStatement();
+            _resultSet = _statement.executeQuery(sqlStatement);
+        }
+        catch(ClassNotFoundException | SQLException e)
+        {
+            System.out.println(e);
+        }
         
         return _resultSet;
     }
     
-    private void executeSqlUpdate(String sqlStatement) throws SQLException, ClassNotFoundException
+    @Override
+    public void executeSqlUpdate(String sqlStatement)
     {
-        Class.forName("org.sqlite.JDBC");
-        _connection = DriverManager.getConnection("jdbc:sqlite:rsc\\UserNames.db");
-        _connection.setAutoCommit(false);
-        
-        _statement = _connection.createStatement();
-        
-        _statement.executeUpdate(sqlStatement);
-        _connection.commit();
-        _statement.close();
-        _connection.close();
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+            _connection = DriverManager.getConnection("jdbc:sqlite:rsc\\UserNames.db");
+            _connection.setAutoCommit(false);
+
+            _statement = _connection.createStatement();
+
+            _statement.executeUpdate(sqlStatement);
+            _connection.commit();
+            _statement.close();
+            _connection.close();
+        }
+        catch(ClassNotFoundException | SQLException e)
+        {
+            System.out.println(e);
+        }
     }
     
-    private void closeDatabase() throws SQLException
+    @Override
+    public void closeDatabase()
     {
+        try
+        {
         _resultSet.close();
         _statement.close();
         _connection.close();
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e);
+        }
     }
     
-    private void initialiseLists()
+    @Override
+    public void initialiseLists()
     {
         String sql = "SELECT Username, Password FROM Usernames";
         try
@@ -65,27 +90,22 @@ public class UserNameStorageManager
             }
             closeDatabase();
         }
-        catch(SQLException | ClassNotFoundException e)
+        catch(SQLException e)
         {
             System.out.println(e);
         }
     }
     
+    @Override
     public void SaveName(String name, String password)
     {
         String sql = "INSERT INTO Usernames(Username,Password) VALUES('"+name+"','"+password+"')";
-        try
-        {
-            _userNames.add(name);
-            _userPasswords.add(password);
-            executeSqlUpdate(sql);
-        }
-        catch(SQLException | ClassNotFoundException e)
-        {
-            System.out.println(e);
-        }
+        _userNames.add(name);
+        _userPasswords.add(password);
+        executeSqlUpdate(sql);
     }
     
+    @Override
     public boolean CheckName(String name)
     {
         for(int i = 0; i < _userNames.size(); i++)
@@ -98,6 +118,7 @@ public class UserNameStorageManager
         return true;
     }
     
+    @Override
     public boolean SelectUsername(String name)
     {
         for(int i = 0; i < _userNames.size(); i++)
@@ -111,6 +132,7 @@ public class UserNameStorageManager
         return false;
     }
     
+    @Override
     public boolean Login(String password)
     {
         return _userPasswords.get(_position).equals(password);
