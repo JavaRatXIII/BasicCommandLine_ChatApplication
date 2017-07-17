@@ -24,9 +24,7 @@ public class UserNameStorageManager implements IUserNameStorageManager
     {
         try
         {
-            Class.forName("org.sqlite.JDBC");
-            _connection = DriverManager.getConnection("jdbc:sqlite:rsc\\UserNames.db");
-            _connection.setAutoCommit(false);
+            initialiseConnection();
 
             _statement = _connection.createStatement();
             _resultSet = _statement.executeQuery(sqlStatement);
@@ -44,9 +42,7 @@ public class UserNameStorageManager implements IUserNameStorageManager
     {
         try
         {
-            Class.forName("org.sqlite.JDBC");
-            _connection = DriverManager.getConnection("jdbc:sqlite:rsc\\UserNames.db");
-            _connection.setAutoCommit(false);
+            initialiseConnection();
 
             _statement = _connection.createStatement();
 
@@ -66,9 +62,9 @@ public class UserNameStorageManager implements IUserNameStorageManager
     {
         try
         {
-        _resultSet.close();
-        _statement.close();
-        _connection.close();
+            _resultSet.close();
+            _statement.close();
+            _connection.close();
         }
         catch(SQLException e)
         {
@@ -136,5 +132,13 @@ public class UserNameStorageManager implements IUserNameStorageManager
     public boolean Login(String password)
     {
         return _userPasswords.get(_position).equals(password);
+    }
+    
+    private void initialiseConnection() throws ClassNotFoundException, SQLException
+    {
+        
+        Class.forName("org.sqlite.JDBC");
+        _connection = DriverManager.getConnection("jdbc:sqlite:rsc\\UserNames.db");
+        _connection.setAutoCommit(false);
     }
 }
