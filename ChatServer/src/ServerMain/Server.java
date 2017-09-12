@@ -7,7 +7,6 @@ package ServerMain;
 
 import java.io.BufferedReader;
 import Console.*;
-import Console.IConsole.*;
 import Interfaces.IClientSocketFactory;
 import Interfaces.IConsoleFactory;
 import Utilities.ClientSocketFactory;
@@ -98,7 +97,7 @@ public class Server {
         }
         catch(Exception e)
         {
-            //handle exception here
+            new Console().WriteLine(e.getMessage());
         }
     }
 }

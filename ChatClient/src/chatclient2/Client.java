@@ -10,6 +10,7 @@ import Interfaces.IPrintWriterFactory;
 import Interfaces.ISocketFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
+import Console.*;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -35,14 +36,14 @@ public class Client {
         }
         catch(Exception e)
         {
-            System.out.println(e);
+            new Console().WriteLine(e.getMessage());
         }
     }
     
     public void Receive() throws IOException
     {
         String serverMessage = _input.readLine();
-        System.out.println(serverMessage);
+        new Console().WriteLine(serverMessage);
     }
     
     public void Send(String name,String message)
